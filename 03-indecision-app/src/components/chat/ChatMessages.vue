@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 overflow-y-auto p-4">
+  <div ref="chatRef" class="flex-1 overflow-y-auto p-4">
     <div class="flex flex-col space-y-2">
       <!-- <ChatBubble 
         v-for="(message, index) in messages" 
@@ -19,12 +19,22 @@
 <script setup lang="ts">
 import type { ChatMessage } from '@/interfaces/chat-message.interface';
 import ChatBubble from './ChatBubble.vue';
+import { ref, watch } from 'vue';
+import { sleep } from '../helpers/sleep';
 
 interface Props {
   messages: ChatMessage[]
 }
-defineProps<Props>();
+const {messages} = defineProps<Props>();
 
-const messagesDiv = document.querySelector('.flex-1');
+const chatRef = ref<HTMLDivElement|null>(null);
+
+watch(messages, async() => {
+  await sleep(.1);
+  chatRef.value?.scrollTo({
+    top: chatRef.value.scrollHeight,
+    behavior: 'smooth'
+  });
+})
 
 </script>
