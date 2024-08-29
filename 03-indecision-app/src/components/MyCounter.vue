@@ -1,7 +1,7 @@
 <template>
     <section>
         <h3>Counter: {{ counter  }}</h3>
-        <h3>Square: {{ squareCounter }}</h3>
+        <h3 data-testid="square-label">Square: {{ squareCounter }}</h3>
         <!-- {{ props.text }} -->
     </section>
     <div>
@@ -14,14 +14,13 @@ import { useCounter } from './composables/useCounter';
 
     interface Props {
         value: number;
-        text: string
     }
     const props = defineProps<Props>();
 
     const { counter, squareCounter } = useCounter(props.value);
 
 </script>
-<style>
+<style scoped>
 .btn {
     @apply p-5 bg-blue-500 rounded hover:bg-blue-700 mr-2;
 }
