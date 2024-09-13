@@ -8,11 +8,7 @@
         :message="message.message" 
         :image="message.image"
       /> -->
-      <ChatBubble 
-        v-for="(message, index) in messages" 
-        :key="index" 
-        v-bind="message"
-      />
+      <ChatBubble v-for="(message, index) in messages" :key="index" v-bind="message" />
     </div>
   </div>
 </template>
@@ -23,18 +19,17 @@ import { ref, watch } from 'vue';
 import { sleep } from '../helpers/sleep';
 
 interface Props {
-  messages: ChatMessage[]
+  messages: ChatMessage[];
 }
-const {messages} = defineProps<Props>();
+const props = defineProps<Props>();
 
-const chatRef = ref<HTMLDivElement|null>(null);
+const chatRef = ref<HTMLDivElement | null>(null);
 
-watch(messages, async() => {
-  await sleep(.1);
+watch(props, async () => {
+  await sleep(0.1);
   chatRef.value?.scrollTo({
     top: chatRef.value.scrollHeight,
-    behavior: 'smooth'
+    behavior: 'smooth',
   });
-})
-
+});
 </script>
