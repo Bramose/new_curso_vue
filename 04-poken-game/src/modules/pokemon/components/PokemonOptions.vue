@@ -1,8 +1,15 @@
 <template>
-  <section>
-    <ul class="mt-5">
-      <li v-for="({ name }, index) in pokemonOptions" :key="index">{{ name }}</li>
-    </ul>
+  <section class="mt-5 flex flex-col">
+    <button 
+      v-for="({ name, id }) in options" 
+      :key="id"
+      @click="$emit('selectedOption', id)"
+      :class="['capitalize disabled:shadow-none disabled:bg-gray-100', {
+        correct: correctAnswer == id && blockSelection,
+        incorrect: correctAnswer != id && blockSelection,
+      }]"
+      :disabled="blockSelection"
+    >{{ name }}</button>
   </section>
 </template>
 
@@ -10,14 +17,29 @@
 import type { Pokemon } from '../interfaces';
 
 interface Props {
-  pokemonOptions: Pokemon[];
+  options: Pokemon[];
+  blockSelection: boolean,
+  correctAnswer: number
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
+
+defineEmits<{
+  selectedOption: [id: number];
+}>();
+
 </script>
 
 <style scoped>
-li {
+button {
   @apply bg-white shadow-md rounded-lg p-3 m-2 cursor-pointer w-40 text-center transition-all hover:bg-gray-100;
+}
+
+.correct {
+  @apply bg-blue-500 text-white;
+}
+
+.incorrect {
+  @apply bg-red-100 opacity-70;
 }
 </style>

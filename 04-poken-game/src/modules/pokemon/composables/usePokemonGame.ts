@@ -1,6 +1,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { GameStatus, type Pokemon, type PokemonListResponse } from '../interfaces';
 import { pokemonApi } from '../api/pokemonApi';
+import confetti from 'canvas-confetti';
 import { mixArray } from '../helpers/mix_array';
 
 export const usePokemonGame = () => {
@@ -30,16 +31,30 @@ export const usePokemonGame = () => {
     return mixArray(pokemonsArray);
   };
 
-  const getNextOptions = (howMany: number = 4) => {
+  const getNextRound = (howMany: number = 4) => {
     gameStatus.value = GameStatus.Playing;
     pokemonOptions.value = pokemons.value.slice(0, howMany);
     pokemons.value = pokemons.value.slice(howMany);
   };
 
+  const checkAnswer = (id: number) => {
+    const hasWon = randomPokemon.value.id === id;
+    if(hasWon){
+      gameStatus.value = GameStatus.Won;
+      confetti({
+        particleCount: 300,
+        spread: 150,
+        origin: { y: 0.6 },
+      })
+      return;
+    }
+    gameStatus.value = GameStatus.Lost;
+  }
+
   onMounted(async () => {
     // await new Promise((r) => setTimeout(r, 1000));
     pokemons.value = await getPokemons();
-    getNextOptions();
+    getNextRound();
     console.log(pokemonOptions.value);
   });
 
@@ -48,7 +63,8 @@ export const usePokemonGame = () => {
     isLoading,
     pokemonOptions,
     randomPokemon,
+    checkAnswer,
     // Methods
-    getNextOptions,
+    getNextRound,
   };
 };
