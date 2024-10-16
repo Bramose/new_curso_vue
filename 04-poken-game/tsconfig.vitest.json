@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.app.json",
-  //Se agrega la carpeta de Test
-  "include": ["tests"],
+  //Se agrega la carpeta de Test y las demas carpetas, del proyecto
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tests"],
   "exclude": [],
   "compilerOptions": {
     "composite": true,
